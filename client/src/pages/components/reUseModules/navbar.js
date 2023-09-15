@@ -47,7 +47,7 @@ useEffect(()=>{
                 <ul className="dropdown-menu">
                   <li className="nav-item"><Link to="/shopcategory" className="nav-link" >Shop Category</Link></li>
                   {/* <li className="nav-item"><Link to="/productdetails" className="nav-link" >Product Details</Link></li> */}
-                  <li className="nav-item"><Link to="/productcheckout" className="nav-link" >Product Checkout</Link></li>
+                  {/* <li className="nav-item"><Link to="/productcheckout" className="nav-link" >Product Checkout</Link></li> */}
                   <li className="nav-item"><Link to="/orderconformation" className="nav-link" >Confirmation</Link></li>
                   <li className="nav-item"><Link to="/cart" className="nav-link" >Shopping Cart</Link></li>
                   <li className="nav-item"><Link to="/ordertracking" className="nav-link" href="tracking-order.html">Tracking</Link></li>

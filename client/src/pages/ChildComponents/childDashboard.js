@@ -513,7 +513,7 @@ const handleDeleteproduct = async(list)=>{
     }
 }
 
-
+ 
   return (
     
     <div>

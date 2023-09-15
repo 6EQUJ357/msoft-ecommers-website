@@ -1,9 +1,32 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Footer from './reUseModules/footer'
 import Navbar from './reUseModules/navbar'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import axios from 'axios'
+import { server_access_point } from './config'
 
 const ProductCheckouts = () => {
+    const location = useLocation();
+
+    let productData = location.state;
+    //console.log("product checkout", productData);
+
+    const [resdata, setresdata] = useState([]); 
+
+
+    useEffect(()=>{ 
+        axios.get(`${server_access_point}/productcheckout`, {
+            headers :{
+                "x-access-token" : localStorage.getItem("webtoken")
+            }
+        }).then(res => {
+            setresdata(res.data.data);
+            
+        }).catch(err => console.log(err));
+      
+    },[]) 
+
+
   return (
     
     <div>
@@ -41,8 +64,16 @@ const ProductCheckouts = () => {
   <section className="checkout_area section-margin--small">
     <div className="container">
 
-        
+        {localStorage.getItem("webtoken") ?
 
+         <div className="returning_customer mb-30">
+
+            <div className="check_title">
+                <h2>Hello, </h2>
+            </div>
+         </div>
+        :
+       
         <div className="returning_customer mb-30">
 
             <div className="check_title">
@@ -70,7 +101,8 @@ const ProductCheckouts = () => {
                 </div>
             </form> */}
         </div>
-        
+        }
+
         {/* <div className="cupon_area">
             <div className="check_title">
                 <h2>Have a coupon? <a href="#">Click here to enter your code</a></h2>
@@ -148,17 +180,24 @@ const ProductCheckouts = () => {
                         </div>
                     </form>
                 </div>
+
+                {/* {productData && */}
                 <div className="col-lg-4">
                     <div className="order_box">
                         <h2>Your Order</h2>
+ 
                         <ul className="list">
+
                             <li><a href="#"><h4>Product <span>Total</span></h4></a></li>
-                            <li><a href="#">Fresh Blackberry <span className="middle">x 02</span> <span className="last">$720.00</span></a></li>
-                            <li><a href="#">Fresh Tomatoes <span className="middle">x 02</span> <span className="last">$720.00</span></a></li>
-                            <li><a href="#">Fresh Brocoli <span className="middle">x 02</span> <span className="last">$720.00</span></a></li>
+                            {productData.length > 0 && productData.map(list=>
+                            <li key={list._id}><a href="#">{list.productname} <span className="middle">x {list.enterquantity}</span> <span className="last">&#x20B9; {list.totalamount} /-</span></a></li>)}
+
+                            {/* <li><a href="#">Fresh Tomatoes <span className="middle">x 02</span> <span className="last">$720.00</span></a></li>
+                            <li><a href="#">Fresh Brocoli <span className="middle">x 02</span> <span className="last">$720.00</span></a></li> */}
                         </ul>
+                        
                         <ul className="list list_2">
-                            <li><a href="#">Subtotal <span>$2160.00</span></a></li>
+                            <li><a href="#">Subtotal <span>&#x20B9; {(productData.map(list=> list.totalamount)).reduce((a,b)=>(Number(a) + Number(b)).toFixed(2))} /-</span></a></li>
                             <li><a href="#">Shipping <span>Flat rate: $50.00</span></a></li>
                             <li><a href="#">Total <span>$2210.00</span></a></li>
                         </ul>
@@ -191,6 +230,9 @@ const ProductCheckouts = () => {
                         </div>
                     </div>
                 </div>
+                {/* } */}
+
+
             </div>
         </div>
     </div>

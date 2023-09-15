@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useState, useEffect} from 'react'
 import Footer from './reUseModules/footer'
 import Navbar from './reUseModules/navbar'
 import { Link } from 'react-router-dom'
@@ -14,13 +14,31 @@ import { server_access_point } from './config'
 
 const ProductDetails = () => {
 
-	const [loginuserData, setloginuserData] = useContext(userstore);
-	console.log("presentuser", loginuserData);
+	const [resdata, setresdata] = useState([]); 
+
+
+	useEffect(()=>{ 
+        axios.get(`${server_access_point}/productdetails`, {
+            headers :{
+                "x-access-token" : localStorage.getItem("webtoken")
+            }
+        }).then(res => {
+            setresdata(res.data.data);
+           
+        }).catch(err => console.log(err));
+      
+    },[]) 
+
+    //no token 
+    if(!localStorage.getItem("webtoken")){
+      return <Navigate to="/signin" /> 
+  }
+
 
 	const location = useLocation();
 
 	let productData = location.state;
-	//console.log("img", productData.productimg);
+	//console.log("img", productData);
 
 	const [changeImg, SetChangeImg] = useState(productData.productimg[0]);
 
@@ -42,8 +60,9 @@ const ProductDetails = () => {
 			productprice : productData.productprice,
 			enterquantity : "",
 			productdescription : productData.productdescription,
-			totalamount : ""
-			// useremail :  loginuserData.email
+			totalamount : "",
+			username : "",
+			useremail :  ""
 			},
 	
 		validationSchema:Yup.object().shape({
@@ -71,7 +90,9 @@ const ProductDetails = () => {
 
 	const handleChangeQuantityChange = (e)=>{
 		formik.setFieldValue("enterquantity", e.target.value);
-		formik.setFieldValue("totalamount", (Number(e.target.value) * Number(productData.productprice)).toString())
+		formik.setFieldValue("totalamount", (Number(e.target.value) * Number(productData.productprice)).toString());
+		formik.setFieldValue("useremail", resdata.email);
+		formik.setFieldValue("username", resdata.username); 
 	}
 
   return (

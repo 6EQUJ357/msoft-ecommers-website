@@ -47,7 +47,7 @@ app.get("/", (req, res)=>{
 
 
 // all protected route
-app.get(["/dashboard", "/edituser", "/editproduct"], jwtMiddleware, protect_router_myaccount.protect_myaccount)
+app.get(["/dashboard", "/edituser", "/editproduct", "/productdetails", "/cart", "/productcheckout"], jwtMiddleware, protect_router_myaccount.protect_myaccount)
 
 
 //signup post API
@@ -62,7 +62,7 @@ app.get("/getallusers", authcontroller.getAllUsers)
 
 //edit users (include admin)
 app.put("/edituser/:id", authcontroller.editUsers)
-
+ 
 //delete users
 app.delete("/deleteuser/:id", authcontroller.deleteUsers)
 
@@ -127,11 +127,16 @@ app.put("/editproduct/:id", upload.array("productimg"), products.editProduct)
 app.delete("/deleteproduct/:id", products.deleteProduct)
 
 
+
+
 // add to cart
 app.post("/addtocart", addToCart.addToCart)
 
 // get cart products
 app.get("/getcartproducts", addToCart.getCartProducts)
+
+//delete cart products
+app.delete("/deletecartproduct/:id", addToCart.deleteCartProducts)
 
 
 app.listen(port, ()=>console.log(`server is running at : ${port}`))  

@@ -47,7 +47,7 @@ let signInUserControllerPost = async(req, res)=>{
                 console.log(err);
                 return res.json({status : 400, response : false, message :"Error while generating JWT"})
             }
-            return res.json({token:token, status : 200, response : true, message:"login successfully.."}) //send token
+            return res.json({token:token, status : 200, response : true, message:"login successfully..", data : exist}) //send token
 
         })
 

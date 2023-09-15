@@ -29,6 +29,15 @@ let addToCartModel = new mongoose.Schema({
         type : String,
         require : true
     },
+    username : {
+        type : String,
+        require : true
+    },
+    useremail : {
+        type : String,
+        require : true,
+        unique : true
+    },
     date : {
         type: Date,
         default:Date.now()

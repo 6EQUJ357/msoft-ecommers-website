@@ -8,8 +8,14 @@ import axios from "axios"
 import { server_access_point } from './config'
 
 import "../../App.css"
- 
+  
+
+
+
 const Signin = () => {
+
+	
+
 	const navigate = useNavigate();
 
 	const formik = useFormik({
@@ -34,6 +40,7 @@ const Signin = () => {
 					if(res.data.status === 200){
             
 						localStorage.setItem("webtoken", res.data.token);
+
 						 //resetForm({values : ""});
 			
 						//navigate to user page

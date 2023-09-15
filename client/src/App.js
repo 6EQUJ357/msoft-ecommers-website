@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react'
+import React from 'react'
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 
 
@@ -16,16 +16,14 @@ import Dashboard from './pages/components/dashboard'
 import EditUser from './pages/components/editUser'
 import EditProduct from './pages/components/editProduct'
 
-export const userstore = createContext();
+
 
 const App = () => {
 
-  const [loginuserData, setloginuserData] = useState(null);
-  //console.log("user", loginuserData)
 
   return (
     
-    <userstore.Provider value={[loginuserData, setloginuserData]}>
+   
       <BrowserRouter>
         <Routes>
           <Route path='/signin' element = {<Signin />}/>
@@ -48,7 +46,7 @@ const App = () => {
           <Route path='/editproduct' element = {<EditProduct />}/>
         </Routes>
       </BrowserRouter>
-    </userstore.Provider>
+   
   )
 }
 

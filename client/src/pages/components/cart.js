@@ -12,10 +12,23 @@ const Cart = () => {
     const navigate = useNavigate();
 
     const [cartProduct, setCartProduct] = useState([]);
-    console.log("cart products", cartProduct);
+    //console.log("cart products", cartProduct);
+
+    const [resdata, setresdata] = useState([]); 
 
 
     useEffect(()=>{
+        axios.get(`${server_access_point}/cart`, {
+            headers :{
+                "x-access-token" : localStorage.getItem("webtoken")
+            }
+        }).then(res => {
+            setresdata(res.data.data);
+           
+        }).catch(err => console.log(err));
+
+
+
         axios.get(`${server_access_point}/getcartproducts`).then(res=>{
 
             setCartProduct(res.data.cartProductData);
@@ -24,12 +37,28 @@ const Cart = () => {
         }).catch(err=>console.log(err, "error while fetching cart product data"))
     },[])
 
+     //no token 
+     if(!localStorage.getItem("webtoken")){
+        return <Navigate to="/signin" /> 
+    }
+
 
     //handle MoveToCheckOut
 
     const handleMoveToCheckOut = ()=>{
         navigate("/productcheckout", {state : cartProduct})
     }
+
+
+    //delete cart product
+     const handleDeleteCartproduct = async(list)=>{
+        await axios.delete(`${server_access_point}/deletecartproduct/${list._id}`).then(res=>{
+
+            setCartProduct(res.data.cartProductData);
+
+
+        }).catch(err=>console.log(err, "error while deleting cart product data"))
+     } 
   return (
    
     <div>
@@ -82,6 +111,7 @@ const Cart = () => {
                               <th scope="col">Price</th>
                               <th scope="col">Quantity</th>
                               <th scope="col">Total</th>
+                              <th scope="col">Action</th>
                           </tr>
                       </thead>
 
@@ -126,8 +156,13 @@ const Cart = () => {
                                           className="reduced items-count" type="button"><i className="lnr lnr-chevron-down"></i></button> */}
                                   </div>
                               </td>
+                              
                               <td>
                                   <h5>&#x20B9; {list.totalamount} /-</h5>
+                              </td>
+
+                              <td>
+                                  <button onClick={()=>handleDeleteCartproduct(list)}><i className="ti-trash" style={{color:"red"}}></i></button>
                               </td>
                           </tr>
 
@@ -148,6 +183,9 @@ const Cart = () => {
                               <td>
                                   <h5>&#x20B9; {(cartProduct.map(list=> list.totalamount)).reduce((a,b)=>(Number(a) + Number(b)).toFixed(2))} /-</h5>
                               </td>
+
+                              <td></td>
+
                           </tr>
 
 
@@ -168,6 +206,8 @@ const Cart = () => {
                                       <a style={{cursor : "pointer"}} className="primary-btn ml-2" onClick={handleMoveToCheckOut} >Proceed to checkout</a>
                                   </div>
                               </td>
+
+                              <td></td>
 
                               <td></td>
 

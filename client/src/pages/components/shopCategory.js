@@ -22,7 +22,7 @@ const ShopCategory = () => {
       {
           setAllCategory(res.data.categoryData); 
 
-      }).catch(err=>console.log(err));
+      }).catch(err=>console.log(err)); 
 
 
       //get all products
